@@ -82,7 +82,7 @@ def registerLink():
     return status_message
 
 
-@app.route("/<destination>", methods=["GET"])
+@app.route("/<alias_url>", methods=["GET"])
 def redirectLink(alias_url):
     source = getSourceURL(alias_url)
     return redirect(source, 302)

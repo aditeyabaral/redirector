@@ -14,16 +14,13 @@ Use the following Python script to make a POST request and create your link.
 import sys
 import requests
 
-
-source, destination = sys.argv[1:]
-
 params = {
-    "source": source,
-    "destination": destination
+    "source_url" = sys.argv[1],
+    "alias_url" = sys.argv[2]
 }
 
 response = requests.post("https://goto-link.herokuapp.com/register", data=params)
-print(response.content)
+print(str(response.content))
 ```
 
 Execute the above script using
