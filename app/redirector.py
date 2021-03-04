@@ -30,23 +30,6 @@ class Redirection(db.Model):
         self.platform = request.user_agent.platform
 
 
-# class Logging(db.Model):
-#     __tablename__ = "logging"
-#     _id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-#     time = db.Column(db.DateTime, nullable=False)
-#     ip = db.Column(db.String(20), nullable=False)
-#     browser = db.Column(db.String(100))
-#     platform = db.Column(db.String(30))
-#     site = db.Column(db.String(1024), nullable=False)
-# 
-#     def __init__(self, site_name):
-#         self.site = site_name
-#         self.time = datetime.utcnow()
-#         self.ip = request.headers.getlist("X-Forwarded-For")[0]
-#         self.platform = request.user_agent.platform
-#         self.browser = request.user_agent.browser
-
-
 def checkAliasExists(alias_url):
     if db.session.query(Redirection).filter(Redirection.alias_url == alias_url).count() > 0:
         return True
@@ -77,7 +60,6 @@ def addRedirectEntry(source_url, alias_url):
 @app.route("/", methods=["GET"])
 def home():
     source = "https://github.com/aditeyabaral/redirector"
-    # addLoggingEntry("home")
     return redirect(source, 302)
 
 
@@ -97,14 +79,12 @@ def registerLink():
         else:
             status_message = f"{alias_url} already exists", 400
 
-    # addLoggingEntry("register")
     return status_message
 
 
 @app.route("/<destination>", methods=["GET"])
 def redirectLink(alias_url):
     source = getSourceURL(alias_url)
-    # addLoggingEntry(source)
     return redirect(source, 302)
 
 
