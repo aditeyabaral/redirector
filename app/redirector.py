@@ -1,8 +1,10 @@
 import os
+import dotenv
 from flask import Flask, request, redirect, abort
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 
+dotenv.load_dotenv()
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DB_KEY"]
