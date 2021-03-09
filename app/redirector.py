@@ -39,18 +39,13 @@ def checkAliasExists(alias_url):
 
 
 def getSourceURL(alias_url):
-    result = db.session.query(Redirection).filter(Redirection.alias_url == alias_url).first()
+    result = db.session.query(Redirection).filter(
+        Redirection.alias_url == alias_url).first()
     if result is not None:
         source = result.source_url
         return source
     else:
         abort(404)
-
-
-def addLoggingEntry(site):
-    data = Logging(site)
-    db.session.add(data)
-    db.session.commit()
 
 
 def addRedirectEntry(source_url, alias_url):
