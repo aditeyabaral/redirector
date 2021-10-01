@@ -40,7 +40,7 @@ def checkAliasExists(alias_url):
     return False
 
 
-def generate_alias() -> str:
+def generateAlias() -> str:
     """Generate random 6-characters alias that contains digits, lowercase and uppercase letters"""
     while True:
         alias = ''.join(random.choices(string.ascii_lowercase + string.ascii_uppercase + string.digits, k=6))
@@ -80,7 +80,7 @@ def registerLink():
 
     else:
         if alias_url is None:
-            alias_url = generate_alias()
+            alias_url = generateAlias()
 
         if not checkAliasExists(alias_url):
             addRedirectEntry(source_url, alias_url)
