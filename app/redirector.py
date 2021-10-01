@@ -1,5 +1,7 @@
 import os
 import dotenv
+import random
+import string
 from flask import Flask, request, redirect, abort
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
@@ -38,6 +40,14 @@ def checkAliasExists(alias_url):
     return False
 
 
+def generateAlias() -> str:
+    """Generate random 6-characters alias that contains digits, lowercase and uppercase letters"""
+    while True:
+        alias = ''.join(random.choices(string.ascii_lowercase + string.ascii_uppercase + string.digits, k=6))
+        if not checkAliasExists(alias):
+            return alias
+
+
 def getSourceURL(alias_url):
     result = db.session.query(Redirection).filter(
         Redirection.alias_url == alias_url).first()
@@ -65,10 +75,13 @@ def registerLink():
     source_url = request.form.get("source_url", default=None)
     alias_url = request.form.get("alias_url", default=None)
 
-    if source_url is None or alias_url is None:
+    if source_url is None:
         status_message = f"Source or Destination cannot be empty", 400
 
     else:
+        if alias_url is None:
+            alias_url = generateAlias()
+
         if not checkAliasExists(alias_url):
             addRedirectEntry(source_url, alias_url)
             status_message = f"{alias_url} is now successfully linked to {source_url}", 200
