@@ -72,6 +72,7 @@ class RedirectionDatabase:
         else:
             return None
 
+
     def get_all_urls_from_ip(self, ip_address):
         query = self.redirection_table.select().where(
             self.redirection_table.c.ip_address == ip_address
@@ -87,3 +88,4 @@ class RedirectionDatabase:
                 }
             )
         return result
+
