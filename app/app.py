@@ -5,7 +5,7 @@ import datetime
 import gh_md_to_html
 from dotenv import load_dotenv
 from urllib.parse import urlparse
-from flask import Flask, request, redirect, abort
+from flask import Flask, request, redirect, abort, jsonify
 
 from db import RedirectionDatabase
 
@@ -90,6 +90,21 @@ def redirect_to_source_url(alias_name):
         logging.info(f"Redirecting to {source_url}")
         return redirect(source_url, 302)
 
+@app.route("/links")
+def fetch_all_links_for_user():
+    ip_address = (
+                request.headers.getlist("X-Forwarded-For")[0]
+                if request.headers.getlist("X-Forwarded-For")
+                else request.remote_addr
+            )
+    logging.info(f"Fetching all the links for IP address: {ip_address}")
+    output = redirection_db.get_all_urls_from_ip(ip_address)
+    if output is None:
+        logging.error(f"No links found for IP address: {ip_address}")
+        return "No links found for IP address", 200
+    else:
+        logging.info(f"Found {len(output)} links for IP address: {ip_address}")
+        return jsonify(output), 200
 
 if __name__ == "__main__":
     redirection_db = RedirectionDatabase()
