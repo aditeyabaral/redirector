@@ -1,5 +1,9 @@
 .vscode
 __pycache__
 test/
-redirector/
-*env
+github-markdown-css/
+images/
+.slugignore
+*.log
+*.html
+data/
