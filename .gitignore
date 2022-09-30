@@ -6,3 +6,4 @@ images/
 .slugignore
 *.log
 *.html
+data/
