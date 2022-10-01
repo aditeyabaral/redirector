@@ -90,13 +90,14 @@ def redirect_to_source_url(alias_name):
         logging.info(f"Redirecting to {source_url}")
         return redirect(source_url, 302)
 
+
 @app.route("/links")
 def fetch_all_links_for_user():
     ip_address = (
-                request.headers.getlist("X-Forwarded-For")[0]
-                if request.headers.getlist("X-Forwarded-For")
-                else request.remote_addr
-            )
+        request.headers.getlist("X-Forwarded-For")[0]
+        if request.headers.getlist("X-Forwarded-For")
+        else request.remote_addr
+    )
     logging.info(f"Fetching all the links for IP address: {ip_address}")
     output = redirection_db.get_all_urls_from_ip(ip_address)
     if output is None:
@@ -105,6 +106,20 @@ def fetch_all_links_for_user():
     else:
         logging.info(f"Found {len(output)} links for IP address: {ip_address}")
         return jsonify(output), 200
+
+
+@app.route("/source", methods=["POST"])
+def fetch_all_links_for_source_url():
+    source_url = request.json.get("source_url", None)
+    logging.info(f"Fetching all the links for source URL: {source_url}")
+    output = redirection_db.get_all_urls_from_source_url(source_url)
+    if output is None:
+        logging.error(f"No links found for source URL: {source_url}")
+        return "No links found for source URL", 200
+    else:
+        logging.info(f"Found {len(output)} links for source URL: {source_url}")
+        return jsonify(output), 200
+
 
 if __name__ == "__main__":
     redirection_db = RedirectionDatabase()
