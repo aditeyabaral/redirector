@@ -1,6 +1,4 @@
-from ast import alias
 import os
-from unittest import result
 import pytz
 import uuid
 import logging
@@ -99,6 +97,5 @@ class RedirectionDatabase:
         all_results = self.connection.execute(query).fetchall()
         result = []
         for row in all_results:
-            (alias_name,) = row
-            result.append(alias_name)
+            result.append(row[0])
         return result

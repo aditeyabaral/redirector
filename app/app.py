@@ -108,8 +108,9 @@ def fetch_all_links_for_user():
         return jsonify(output), 200
 
 
-@app.route("/source/<source_url>")
-def fetch_all_links_for_source_url(source_url):
+@app.route("/source", methods=["POST"])
+def fetch_all_links_for_source_url():
+    source_url = request.json.get("source_url", None)
     logging.info(f"Fetching all the links for source URL: {source_url}")
     output = redirection_db.get_all_urls_from_source_url(source_url)
     if output is None:
